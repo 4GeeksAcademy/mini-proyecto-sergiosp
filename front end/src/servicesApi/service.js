@@ -40,26 +40,30 @@ const products = [
 
 export const createProduct = async () => {
     try {
-        await Promise.all(
-            products.map(product =>
-                fetch('https://cautious-enigma-pjp4pj5wrw9phrp9q-5000.app.github.dev/products/',
-                    {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json'
-                        },
-                        body: JSON.stringify(product)
-                    }
-                )
-            )
-        )
+        // Primero obtener productos existentes
+        const existingProducts = await getProducts();
+        const existingNames = existingProducts.map(p => p.name);
         
-
+        // Solo crear productos que no existan
+        const newProducts = products.filter(p => !existingNames.includes(p.name));
+        
+        if (newProducts.length > 0) {
+            await Promise.all(
+                newProducts.map(product =>
+                    fetch('https://cautious-enigma-pjp4pj5wrw9phrp9q-5000.app.github.dev/products/', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(product)
+                    })
+                )
+            );
+            
+        } 
     } catch (error) {
         console.error('error al crear productos', error);
-
     }
 }
+
 
 export const getProducts = async () => {
     const response = await fetch('https://cautious-enigma-pjp4pj5wrw9phrp9q-5000.app.github.dev/products/',

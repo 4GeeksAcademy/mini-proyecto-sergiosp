@@ -1,26 +1,28 @@
-import { useEffect } from 'react'
-import { Link } from 'react-router'
-import { createProduct } from '../servicesApi/service'
+import { Link } from "react-router";
+
 
 function Home() {
-
   
+  return (
+    <>
+      <h1 className="text-center mt-4">
+        <strong>Maquina expendedora</strong>
+      </h1>
 
-    return (
-        <>
-            <h1 className='text-center mt-4'><strong>Maquina expendedora</strong></h1>
+      <h3 className="cuerpo text-center mt-3">
+        Bienvenido a esta maravillosa maquina pulse el boton que te dara acceso
+        a los productos.
+      </h3>
 
-            <div className="cuerpo text-center mt-3">
-                Bienvenido a esta maravillosa maquina pulse el boton que te dara acceso a los productos.
-
-            </div>
-
-            <Link to={'/maquina-exp'}>
-                <button onClick={createProduct} className='btn btn-danger btn-lg d-block mx-auto mt-3'>Ir a Maquina</button>
-            </Link>
-
-        </>
-    )
+      <Link to={"/maquina-exp"} style={{ textDecoration: "none" }}>
+        <button
+          className="btn btn-danger btn-lg d-block mx-auto mt-3"
+        >
+          Ir a Maquina
+        </button>
+      </Link>
+    </>
+  );
 }
 
-export default Home
+export default Home;

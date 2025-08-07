@@ -1,67 +1,56 @@
-import { useEffect, useState } from 'react'
-import '../App.css'
-import { getProducts } from '../servicesApi/service'
-import { CardProducts } from '../Components/CardProducts'
+import { useEffect, useState } from "react";
+import "../App.css";
+import { createProduct, getProducts } from "../servicesApi/service";
+import { CardProducts } from "../Components/CardProducts";
 
 export const Maquina = () => {
+  const [products, setProducts] = useState(null);
+  const [selected, setSelected] = useState(null);
 
-    const [products, setProducts] = useState(null)
+  useEffect(() => {
+    const loadProducts = async () => {
+      const data = await getProducts();
+      console.log(data);
+      
+      if (data.length <= 2) {
+        await createProduct();
 
-    const dataExtract = async () => {
-        const data = await getProducts()
-        setProducts(data)
-    }
+        data = await getProducts();
+      } else {
+      }
 
-    useEffect(()=> {
-        dataExtract()
-    },[])
+      setProducts(data);
+    };
 
-    if (!products) {
-        return <p>Cargando...........</p>
-    }
+    loadProducts();
+    
+    
+  }, []);
 
-    return (
-        <>
-            <div className="vending-machine">
-                <div className="display" id="display">
-                    Selecciona un producto
-                </div>
-                <div className="products-grid" id="products-grid">
-                    {
-                        products.map(product => (
-                            <CardProducts key={product.id} product={product}/>
-                        ))
-                    }
-                </div>
-                <div className="controls">
-                    <div className="money-display">
-                        Dinero insertado: $<span id="money">0.00</span>
-                    </div>
-                    <div className="coin-buttons">
-                        <button className="coin-btn">
-                            25¢
-                        </button>
-                        <button className="coin-btn">
-                            50¢
-                        </button>
-                        <button className="coin-btn">
-                            $1
-                        </button>
-                        <button className="coin-btn">
-                            $2
-                        </button>
-                    </div>
-                    <div className="action-buttons">
-                        <button className="action-btn return-btn">
-                            Devolver Dinero
-                        </button>
-                    </div>
-                </div>
-                <div className="dispenser" id="dispenser">
-                    Aquí aparecerá tu producto
-                </div>
-            </div>
+  if (!products) {
+    return <h2>Cargando...........</h2>;
+  }
 
-        </>
-    )
-}
+  return (
+    <>
+      <div className="vending-machine my-5">
+        <div className="display" id="display">
+          Selecciona un producto
+        </div>
+        <div className="products-grid" id="products-grid">
+          {products.map((product) => (
+            <CardProducts key={product.id} product={product} isActive={selected == product.id} onClick={()=> setSelected(product.id)} />
+          ))}
+        </div>
+        <div className="controls">
+          <div className="action-buttons">
+            <button className="action-btn return-btn">Comprar</button>
+          </div>
+        </div>
+        <div className="dispenser" id="dispenser">
+          Aquí aparecerá tu producto
+        </div>
+      </div>
+    </>
+  );
+};
